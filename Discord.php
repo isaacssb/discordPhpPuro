@@ -5,8 +5,8 @@
  */
 class Discord
 {
-    private $status = false;
-    private $error;
+    public $status = false;
+    public $error;
     private $channel;
     private $discordBotToken;
     public function __construct($channel, $discordBotToken)
@@ -23,10 +23,14 @@ class Discord
      */
     public function sendMessage($message)
     {
+        if(empty($message)) {
+            $this->error = 'Menssagem não informada';
+            return;
+        }
         $curl = curl_init();
 
         $message = '{
-            "content": "**Lista de Web Services travados**"
+            "content": "' . $message . '"
         }';
 
         $arrHeader = array(
@@ -35,8 +39,6 @@ class Discord
             'Authorization: Bot ' . $this->discordBotToken,
         );
 
-        // echo $message;
-        // exit;
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://discordapp.com/api/v6/channels/' . $this->channel . '/messages',
             CURLOPT_RETURNTRANSFER => true,
@@ -51,9 +53,12 @@ class Discord
         ));
 
         $response = curl_exec($curl);
+        $response = json_decode($response, true);
+        if(array_key_exists('code', $response)) {
+            $this->error = $response['message'];
+            return;
+        }
         curl_close($curl);
-        echo '<pre>';
-        var_dump($response);
         $this->status = true;
     }
 }
