@@ -15,7 +15,5 @@ Lembre de adicionar esse aquivo no .gitignore
 
 Rode na sua pasta o seguinte comando
 php -S localhost:8000 (troque a porta para sua preferência)
-```
 Chame a classe conforme o arquivo index.php
-
 Dessa forma você tem uma função do discord sem precisar baixar 40mb de arquivos
